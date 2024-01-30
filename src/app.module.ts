@@ -1,7 +1,12 @@
-import { Module } from '@nestjs/common';
-import { CatsControler } from './cats/cats.controller';
-import { CatsService } from './cats/cats.service';
+import {
+  MiddlewareConsumer,
+  Module,
+  NestModule,
+  RequestMethod,
+} from '@nestjs/common';
 import { CatsModule } from './cats/cats.module';
+import { LoggerMiddleware } from './cats/middleware/logger.middleware';
+import { CatsControler } from './cats/cats.controller';
 
 // É preciso adicionar o Service na lista de providers para que o Nest
 // possa performar a injeção de dependencias
@@ -20,4 +25,16 @@ import { CatsModule } from './cats/cats.module';
   // Os providers que serão instanciados pelo Nest Injector
   providers: [],
 })
-export class AppModule {}
+
+// As Middlewares não são implementadas no objeto @Module
+// Em vez disso é preciso implementalos no metodo configure do NestModule
+export class AppModule implements NestModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer
+      .apply(LoggerMiddleware)
+      // .forRoutes({ path: 'cats', method: RequestMethod.GET });
+      // .forRoutes('cats');
+      // .forRoutes('*'); // Para utilizar globalmente
+      .forRoutes(CatsControler);
+  }
+}
