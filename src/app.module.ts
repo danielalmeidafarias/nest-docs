@@ -5,8 +5,11 @@ import {
   RequestMethod,
 } from '@nestjs/common';
 import { CatsModule } from './cats/cats.module';
-import { LoggerMiddleware } from './cats/middleware/logger.middleware';
+import { LoggerMiddleware } from './middleware/logger.middleware';
 import { CatsControler } from './cats/cats.controller';
+import { APP_FILTER, APP_PIPE } from '@nestjs/core';
+import { HttpExceptionFilter } from './exceptions/http-exception.filter';
+import { ClassValidatorPipe } from './pipes/class-validator.pipe';
 
 // É preciso adicionar o Service na lista de providers para que o Nest
 // possa performar a injeção de dependencias
@@ -23,7 +26,20 @@ import { CatsControler } from './cats/cats.controller';
   controllers: [],
 
   // Os providers que serão instanciados pelo Nest Injector
-  providers: [],
+  providers: [
+    // global-scoped filter
+
+    // {
+    //   provide: APP_FILTER,
+    //   useClass: HttpExceptionFilter,
+    // },
+
+    // global-scoped pipe
+    {
+      provide: APP_PIPE,
+      useClass: ClassValidatorPipe,
+    },
+  ],
 })
 
 // As Middlewares não são implementadas no objeto @Module
