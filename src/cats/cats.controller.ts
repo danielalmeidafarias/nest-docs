@@ -10,6 +10,7 @@ import {
   // ParseIntPipe,
   Post,
   UseFilters,
+  UseGuards,
   UsePipes,
 } from '@nestjs/common';
 import { CreateCatDto } from './dto/createCat.dto';
@@ -20,8 +21,13 @@ import { ZodValidationPipe } from 'src/pipes/zod-validation.pipe';
 import { createCatSchema } from './schema/create-cat.schema';
 import { ClassValidatorPipe } from 'src/pipes/class-validator.pipe';
 import { ParseIntPipe } from 'src/pipes/parse-int.pipe';
+import { RolesGuard } from 'src/auth/roles.guard';
+import { Roles } from 'src/decorators/roles.decorator';
 
 @Controller('cats')
+
+// controller-scoped guard
+@UseGuards(RolesGuard)
 
 // controller-scoped filter
 // @UseFilters(HttpExceptionFilter)
@@ -58,8 +64,13 @@ export class CatsControler {
 
   @Post()
 
+  // method-scoped guard
+  // @UseGuards(RolesGuard)
+
   // Zod Pipes
   // @UsePipes(new ZodValidationPipe(createCatSchema))
+
+  @Roles(['admin'])
   async create(@Body() createCatDto: CreateCatDto) {
     // async create(@Body(new ClassValidatorPipe()) createCatDto: CreateCatDto)
 

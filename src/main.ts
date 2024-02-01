@@ -4,6 +4,7 @@ import { LoggerMiddleware } from './middleware/logger.middleware';
 import { HttpExceptionFilter } from './exceptions/http-exception.filter';
 import { ValidationPipe } from '@nestjs/common';
 import { ClassValidatorPipe } from './pipes/class-validator.pipe';
+import { RolesGuard } from './auth/roles.guard';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -15,6 +16,9 @@ async function bootstrap() {
   // app.useGlobalPipes(
   //   new ClassValidatorPipe()
   // )
+
+  // global-scoped guard
+  // app.useGlobalGuards(new RolesGuard())
 
   await app.listen(3000);
 }

@@ -10,4 +10,4 @@ export const createCatSchema = z
   })
   .required();
 
-export type CreateCatDto = z.infer<typeof createCatSchema>
+// export type CreateCatDto = z.infer<typeof createCatSchema>

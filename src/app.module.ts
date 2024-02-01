@@ -7,9 +7,10 @@ import {
 import { CatsModule } from './cats/cats.module';
 import { LoggerMiddleware } from './middleware/logger.middleware';
 import { CatsControler } from './cats/cats.controller';
-import { APP_FILTER, APP_PIPE } from '@nestjs/core';
+import { APP_FILTER, APP_GUARD, APP_PIPE } from '@nestjs/core';
 import { HttpExceptionFilter } from './exceptions/http-exception.filter';
 import { ClassValidatorPipe } from './pipes/class-validator.pipe';
+import { RolesGuard } from './auth/roles.guard';
 
 // É preciso adicionar o Service na lista de providers para que o Nest
 // possa performar a injeção de dependencias
@@ -39,6 +40,12 @@ import { ClassValidatorPipe } from './pipes/class-validator.pipe';
       provide: APP_PIPE,
       useClass: ClassValidatorPipe,
     },
+
+    // global-scoped guard(utilizando o dependency injector)
+    // {
+    //   provide: APP_GUARD,
+    //   useClass: RolesGuard
+    // }
   ],
 })
 
